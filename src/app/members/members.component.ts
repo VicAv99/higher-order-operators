@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+import { MembersDetailsComponent } from './members-details/members-details.component';
+import { MembersListComponent } from './members-list/members-list.component';
 
 @Component({
   selector: 'higher-order-operators-members',
   standalone: true,
-  imports: [CommonModule],
+  imports: [MembersDetailsComponent, MembersListComponent],
   templateUrl: './members.component.html',
-  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersComponent {}

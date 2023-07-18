@@ -1,1 +1,26 @@
-<router-outlet></router-outlet>
+<mat-toolbar color="primary" class="relative mat-elevation-z3">
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h3 class="text-2xl">Higher Order Operators</h3>
+  <span class="flex-auto"></span>
+  <button mat-icon-button>
+    <mat-icon>favorite</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-drawer-container [hasBackdrop]="false" class="h-[calc(100vh-55px)]">
+  <mat-drawer #drawer mode="side" class="w-64">
+    <mat-nav-list>
+      <mat-list-item routerLink="/" routerLinkActive="text-cyan-600">
+        <mat-icon matListItemIcon class="!mr-4">home</mat-icon>
+        <span matListItemTitle>Home</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

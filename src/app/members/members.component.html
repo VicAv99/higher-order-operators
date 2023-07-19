@@ -1,8 +1,11 @@
 <div class="flex flex-wrap gap-3 mt-3 md:flex-nowrap">
   <div class="order-2 w-full md:order-1">
-    <higher-order-operators-members-list></higher-order-operators-members-list>
+    <higher-order-operators-members-list
+      [members]="members$ | async"
+      (selected)="selectMember($event)"
+    />
   </div>
   <div class="order-1 w-full md:order-2">
-    <higher-order-operators-members-details></higher-order-operators-members-details>
+    <higher-order-operators-members-details [member]="selectedMember" />
   </div>
 </div>

@@ -29,6 +29,14 @@ export class MembersComponent {
     });
   }
 
+  updateMember(member: Member) {
+    this.membersService.update(member).subscribe({
+      next: () => {
+        this.members$ = this.membersService.all();
+      },
+    });
+  }
+
   deleteMember(member: Member) {
     this.membersService.delete(member.id).subscribe({
       next: () => {

@@ -32,6 +32,7 @@ export class MembersDetailsComponent {
   }
 
   @Output() created = new EventEmitter<Member>();
+  @Output() updated = new EventEmitter<Member>();
 
   get memberId(): number | null | undefined {
     return this.form.get('id')?.value;
@@ -47,6 +48,10 @@ export class MembersDetailsComponent {
   });
 
   formSubmitted(member: NullablePartial<Member>) {
-    if (!member.id) this.created.emit(member as Member);
+    if (member.id) {
+      this.updated.emit(member as Member);
+    } else {
+      this.created.emit(member as Member);
+    }
   }
 }

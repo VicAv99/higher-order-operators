@@ -2,7 +2,7 @@
   <mat-card-header>
     <mat-card-title>Create A Member</mat-card-title>
   </mat-card-header>
-  <form [formGroup]="form">
+  <form [formGroup]="form" (submit)="formSubmitted(form.value)">
     <mat-card-content>
       <mat-form-field class="w-full">
         <mat-label>First Name</mat-label>

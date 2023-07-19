@@ -21,6 +21,14 @@ export class MembersComponent {
     this.selectedMember = member;
   }
 
+  createMember(member: Member) {
+    this.membersService.create(member).subscribe({
+      next: () => {
+        this.members$ = this.membersService.all();
+      },
+    });
+  }
+
   deleteMember(member: Member) {
     this.membersService.delete(member.id).subscribe({
       next: () => {

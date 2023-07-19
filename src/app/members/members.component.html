@@ -7,6 +7,9 @@
     />
   </div>
   <div class="order-1 w-full md:order-2">
-    <higher-order-operators-members-details [member]="selectedMember" />
+    <higher-order-operators-members-details
+      [member]="selectedMember"
+      (created)="createMember($event)"
+    />
   </div>
 </div>

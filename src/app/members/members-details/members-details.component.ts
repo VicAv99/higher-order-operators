@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-} from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -14,9 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 
 import { Member } from '../member.model';
 
+type NullablePartial<T> = { [P in keyof T]?: T[P] | null };
+
 @Component({
-  selector: 'higher-order-operators-members-details',
   standalone: true,
+  selector: 'higher-order-operators-members-details',
+  templateUrl: './members-details.component.html',
   imports: [
     MatButtonModule,
     MatCardModule,
@@ -26,13 +24,17 @@ import { Member } from '../member.model';
     MatNativeDateModule,
     ReactiveFormsModule,
   ],
-  templateUrl: './members-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersDetailsComponent {
   @Input() set member(value: Member | undefined) {
     if (!value) return;
     this.form.patchValue(value);
+  }
+
+  @Output() created = new EventEmitter<Member>();
+
+  get memberId(): number | null | undefined {
+    return this.form.get('id')?.value;
   }
 
   formBuilder = inject(FormBuilder);
@@ -43,4 +45,8 @@ export class MembersDetailsComponent {
     dob: '',
     email: '',
   });
+
+  formSubmitted(member: NullablePartial<Member>) {
+    if (!member.id) this.created.emit(member as Member);
+  }
 }

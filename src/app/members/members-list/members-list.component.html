@@ -6,9 +6,7 @@
         class="hover:bg-gray-50"
         (click)="selectedClicked(member); $event.stopImmediatePropagation()"
       >
-        <h3 matListItemTitle>
-          {{ member.id }}: {{ member.firstName }} {{ member.lastName }}
-        </h3>
+        <h3 matListItemTitle>{{ member.firstName }} {{ member.lastName }}</h3>
         <button
           mat-icon-button
           matListItemMeta

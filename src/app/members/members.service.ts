@@ -29,15 +29,15 @@ export class MembersService {
     return this.http.patch<Member>(this.getUrlForId(member.id), member);
   }
 
-  delete(memberId: number): Observable<Member> {
-    return this.http.delete<Member>(this.getUrlForId(memberId));
+  delete(memberId: number): Observable<void> {
+    return this.http.delete<void>(this.getUrlForId(memberId));
   }
 
-  private getUrl() {
+  private getUrl(): string {
     return `${BASE_URL}/${path}`;
   }
 
-  private getUrlForId(id: number) {
+  private getUrlForId(id: number): string {
     return `${this.getUrl()}/${id}`;
   }
 }

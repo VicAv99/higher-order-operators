@@ -2,6 +2,7 @@
   <div class="order-2 w-full md:order-1">
     <higher-order-operators-members-list
       [members]="members$ | async"
+      (deleted)="deleteMember($event)"
       (selected)="selectMember($event)"
     />
   </div>

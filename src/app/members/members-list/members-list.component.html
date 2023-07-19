@@ -4,10 +4,16 @@
       <mat-list-item
         *ngFor="let member of members"
         class="hover:bg-gray-50"
-        (click)="selectedClicked(member)"
+        (click)="selectedClicked(member); $event.stopImmediatePropagation()"
       >
-        <h3 matListItemTitle>{{ member.firstName }} {{ member.lastName }}</h3>
-        <button mat-icon-button matListItemMeta>
+        <h3 matListItemTitle>
+          {{ member.id }}: {{ member.firstName }} {{ member.lastName }}
+        </h3>
+        <button
+          mat-icon-button
+          matListItemMeta
+          (click)="deleteClicked(member); $event.stopImmediatePropagation()"
+        >
           <mat-icon>clear</mat-icon>
         </button>
       </mat-list-item>

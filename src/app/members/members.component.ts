@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { Member } from './member.model';
 import { MembersDetailsComponent } from './members-details/members-details.component';
@@ -7,11 +7,10 @@ import { MembersListComponent } from './members-list/members-list.component';
 import { MembersService } from './members.service';
 
 @Component({
-  selector: 'higher-order-operators-members',
   standalone: true,
-  imports: [AsyncPipe, MembersDetailsComponent, MembersListComponent],
+  selector: 'higher-order-operators-members',
   templateUrl: './members.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AsyncPipe, MembersDetailsComponent, MembersListComponent],
 })
 export class MembersComponent {
   membersService = inject(MembersService);
@@ -20,5 +19,13 @@ export class MembersComponent {
 
   selectMember(member: Member): void {
     this.selectedMember = member;
+  }
+
+  deleteMember(member: Member) {
+    this.membersService.delete(member.id).subscribe({
+      next: () => {
+        this.members$ = this.membersService.all();
+      },
+    });
   }
 }

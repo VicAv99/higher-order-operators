@@ -29,9 +29,14 @@ import { Member } from '../member.model';
 export class MembersListComponent {
   @Input() members?: Member[] | null = [];
 
+  @Output() deleted = new EventEmitter<Member>();
   @Output() selected = new EventEmitter<Member>();
 
   selectedClicked(member: Member) {
     this.selected.emit(member);
+  }
+
+  deleteClicked(member: Member) {
+    this.deleted.emit(member);
   }
 }

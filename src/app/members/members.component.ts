@@ -21,6 +21,10 @@ export class MembersComponent {
     this.selectedMember = member;
   }
 
+  reset(): void {
+    this.selectedMember = undefined;
+  }
+
   createMember(member: Member) {
     this.membersService.create(member).subscribe({
       next: () => {

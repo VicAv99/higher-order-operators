@@ -33,9 +33,14 @@ export class MembersDetailsComponent {
 
   @Output() created = new EventEmitter<Member>();
   @Output() updated = new EventEmitter<Member>();
+  @Output() cancelled = new EventEmitter<void>();
 
   get memberId(): number | null | undefined {
     return this.form.get('id')?.value;
+  }
+
+  get memberFirstName(): string | null | undefined {
+    return this.form.get('firstName')?.value;
   }
 
   formBuilder = inject(FormBuilder);
@@ -53,5 +58,11 @@ export class MembersDetailsComponent {
     } else {
       this.created.emit(member as Member);
     }
+    this.formReset();
+  }
+
+  formReset() {
+    this.form.reset();
+    this.cancelled.emit();
   }
 }

@@ -32,13 +32,23 @@
         (click)="selectedClicked(member); $event.stopImmediatePropagation()"
       >
         <h3 matListItemTitle>{{ member.firstName }} {{ member.lastName }}</h3>
-        <button
-          mat-icon-button
-          matListItemMeta
-          (click)="deleteClicked(member); $event.stopImmediatePropagation()"
-        >
-          <mat-icon>clear</mat-icon>
-        </button>
+        <div matListItemMeta>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteClicked(member); $event.stopImmediatePropagation()"
+          >
+            <mat-icon>clear</mat-icon>
+          </button>
+          <a
+            mat-icon-button
+            color="primary"
+            [routerLink]="['../', 'member', member.id]"
+            (click)="$event.stopImmediatePropagation()"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
       </mat-list-item>
     </mat-list>
   </mat-card-content>

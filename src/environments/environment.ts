@@ -1,3 +1,3 @@
 export const environment = {
-  baseUrl: 'https://json-endpoints-seven.vercel.app',
+  baseUrl: 'https://json.aproofofconcept.com/api',
 };

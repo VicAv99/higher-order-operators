@@ -2,11 +2,17 @@ import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 
-import { CallState, LoadingState, Member } from '../members/member.model';
+import {
+  CallState,
+  Comment,
+  LoadingState,
+  Member,
+} from '../members/member.model';
 import { MembersService } from '../shared/members.service';
 
 export interface MemberState {
   member?: Member;
+  comments?: Comment[];
   callState: CallState;
 }
 
@@ -23,16 +29,23 @@ export class MembersStore extends ComponentStore<MemberState> {
   }
 
   readonly member$ = this.select((state) => state.member);
+  readonly comments$ = this.select((state) => state.comments);
   readonly callState$ = this.select((state) => state.callState);
 
   readonly viewModel$ = this.select({
     member: this.member$,
+    comments: this.comments$,
     callState: this.callState$,
   });
 
   readonly setMember = this.updater((state, member: Member) => ({
     ...state,
     member,
+  }));
+
+  readonly setComments = this.updater((state, comments: Comment[]) => ({
+    ...state,
+    comments,
   }));
 
   readonly setCallState = this.updater((state, callState: CallState) => ({
@@ -45,8 +58,9 @@ export class MembersStore extends ComponentStore<MemberState> {
       id$.pipe(
         tap(() => this.setCallState(LoadingState.LOADING)),
         switchMap((id) =>
-          this.membersService.load(Number(id)).pipe(
-            tap((member) => this.setMember(member)),
+          this.membersService.loadMemberWithComments(Number(id)).pipe(
+            tap(({ comments, ...member }) => this.setMember(member)),
+            tap(({ comments }) => this.setComments(comments)),
             tap(() => this.setCallState(LoadingState.LOADED)),
             catchError((error) => {
               this.setCallState({ errorMsg: error.message });

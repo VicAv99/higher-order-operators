@@ -1,4 +1,26 @@
 {
+  "comments": [
+    {
+      "id": 1,
+      "memberId": 1,
+      "text": "This is a comment for John Doe"
+    },
+    {
+      "id": 2,
+      "memberId": 2,
+      "text": "This is a comment for Jane Doe"
+    },
+    {
+      "id": 3,
+      "memberId": 3,
+      "text": "This is a comment for Bob Smith"
+    },
+    {
+      "id": 4,
+      "memberId": 4,
+      "text": "This is a comment for Sam Smith"
+    }
+  ],
   "members": [
     {
       "id": 1,

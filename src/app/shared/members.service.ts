@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 
-import { Member } from '../members/member.model';
+import { Comment, Member } from '../members/member.model';
 
 const BASE_URL = environment.baseUrl;
 const path = 'members';
@@ -20,6 +20,17 @@ export class MembersService {
 
   load(id: number): Observable<Member> {
     return this.http.get<Member>(this.getUrlForId(id));
+  }
+
+  loadMemberWithComments(
+    id: number
+  ): Observable<Member & { comments: Comment[] }> {
+    return this.http.get<Member & { comments: Comment[] }>(
+      `${this.getUrlForId(id)}`,
+      {
+        params: { _embed: 'comments' },
+      }
+    );
   }
 
   search(term: string): Observable<Member[]> {

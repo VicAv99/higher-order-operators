@@ -4,3 +4,11 @@
   <mat-label>Add A Comment</mat-label>
   <input matInput type="text" formControlName="email" />
 </mat-form-field>
+
+<mat-list>
+  <div *ngFor="let comment of comments" class="hover:bg-gray-100">
+    <mat-list-item>
+      <h3 matListItemTitle>{{ comment.text }}</h3>
+    </mat-list-item>
+  </div>
+</mat-list>

@@ -18,15 +18,11 @@ export class MembersService {
     return this.http.get<Member[]>(this.getUrl());
   }
 
-  load(id: string): Observable<Member> {
-    return this.http.get<Member>(this.getUrlForId(id));
-  }
-
   loadMemberWithComments(
     id: string
   ): Observable<Member & { comments: Comment[] }> {
     return this.http.get<Member & { comments: Comment[] }>(
-      `${this.getUrlForId(id)}`,
+      this.getUrlForId(id),
       {
         params: { _embed: 'comments' },
       }

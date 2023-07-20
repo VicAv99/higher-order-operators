@@ -10,9 +10,17 @@
 </mat-toolbar>
 
 <mat-drawer-container [hasBackdrop]="false" class="h-[calc(100vh-55px)]">
-  <mat-drawer #drawer mode="side" class="w-64">
+  <mat-drawer
+    #drawer
+    [mode]="(isMediumScreen$ | async)?.matches ? 'over' : 'side'"
+    class="w-64"
+  >
     <mat-nav-list>
-      <mat-list-item routerLink="/" routerLinkActive="text-cyan-600">
+      <mat-list-item
+        routerLink="/"
+        routerLinkActive="text-cyan-600"
+        (click)="drawer.close()"
+      >
         <mat-icon matListItemIcon class="!mr-4">home</mat-icon>
         <span matListItemTitle>Home</span>
       </mat-list-item>

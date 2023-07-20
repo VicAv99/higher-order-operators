@@ -21,6 +21,12 @@ export class MembersService {
     return this.http.get<Member>(this.getUrlForId(id));
   }
 
+  search(term: string): Observable<Member[]> {
+    return this.http.get<Member[]>(this.getUrl(), {
+      params: { q: term },
+    });
+  }
+
   create(member: Member): Observable<Member> {
     return this.http.post<Member>(this.getUrl(), member);
   }

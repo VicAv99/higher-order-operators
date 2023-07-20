@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 
 import { Member } from './member.model';
@@ -11,13 +11,12 @@ import { MembersStore } from './members.store';
   selector: 'higher-order-operators-members',
   templateUrl: './members.component.html',
   providers: [MembersStore],
-  imports: [AsyncPipe, MembersDetailsComponent, MembersListComponent],
+  imports: [AsyncPipe, MembersDetailsComponent, MembersListComponent, NgIf],
 })
 export class MembersComponent {
   private readonly membersStore = inject(MembersStore);
 
-  members$ = this.membersStore.members$;
-  selectedMember$ = this.membersStore.member$;
+  viewModel$ = this.membersStore.viewModel$;
 
   constructor() {
     this.membersStore.fetchMembers();

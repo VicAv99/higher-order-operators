@@ -1,4 +1,11 @@
 <mat-card>
+  <mat-card-header>
+    <mat-card-title> Members List </mat-card-title>
+  </mat-card-header>
+  <mat-progress-bar
+    *ngIf="callState === loadingState.LOADING"
+    mode="indeterminate"
+  ></mat-progress-bar>
   <mat-card-content>
     <mat-list>
       <mat-list-item

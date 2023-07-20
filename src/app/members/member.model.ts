@@ -8,7 +8,7 @@ export interface Member {
   email: string;
 }
 
-export const enum LoadingState {
+export enum LoadingState {
   INIT = 'INIT',
   LOADING = 'LOADING',
   LOADED = 'LOADED',

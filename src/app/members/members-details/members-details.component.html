@@ -11,6 +11,7 @@
         <input
           matInput
           type="text"
+          autocomplete="given-name"
           placeholder="Type your first name here"
           formControlName="firstName"
         />
@@ -25,6 +26,7 @@
         <input
           matInput
           type="text"
+          autocomplete="family-name"
           placeholder="Type your last name here"
           formControlName="lastName"
         />
@@ -39,6 +41,7 @@
         <input
           matInput
           type="email"
+          autocomplete="email"
           placeholder="Type your last email here"
           formControlName="email"
         />
@@ -48,7 +51,12 @@
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="dob" />
+        <input
+          matInput
+          [matDatepicker]="picker"
+          autocomplete="bday"
+          formControlName="dob"
+        />
         <mat-hint class="text-sm text-gray-400">MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle
           matIconSuffix

@@ -103,17 +103,13 @@ export class MembersStore extends ComponentStore<MemberState> {
     }
   );
 
-  readonly saveMember = this.effect(
-    (member$: Observable<Member>): Observable<Member> => {
-      return member$.pipe(
-        switchMap((member) => {
-          return member.id
-            ? this.membersService.update(member)
-            : this.membersService.create(member);
-        })
-      );
-    }
-  );
+  readonly saveMember = this.effect((member$: Observable<Member>) => {
+    return member$.pipe(
+      tap((member) => {
+        member.id ? this.updateMember(member) : this.createMember(member);
+      })
+    );
+  });
 
   readonly createMember = this.effect(
     (member$: Observable<Member>): Observable<Member> => {
@@ -121,8 +117,8 @@ export class MembersStore extends ComponentStore<MemberState> {
         tap(() => this.setCallState(LoadingState.LOADING)),
         switchMap((member) => {
           return this.membersService.create(member).pipe(
-            tap(() => {
-              this.setMembers([...this.get().members!, member]);
+            tap((newMember) => {
+              this.setMembers([...this.get().members!, newMember]);
               this.setCallState(LoadingState.LOADED);
             })
           );
@@ -137,9 +133,9 @@ export class MembersStore extends ComponentStore<MemberState> {
         tap(() => this.setCallState(LoadingState.LOADING)),
         switchMap((member) => {
           return this.membersService.update(member).pipe(
-            tap(() => {
+            tap((updatedMember) => {
               const members = this.get().members!;
-              const index = members.findIndex((m) => m.id === member.id);
+              const index = members.findIndex((m) => m.id === updatedMember.id);
               members[index] = member;
               this.setMembers([...members]);
               this.setCallState(LoadingState.LOADED);

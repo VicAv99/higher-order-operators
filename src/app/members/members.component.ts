@@ -27,12 +27,8 @@ export class MembersComponent {
     this.membersStore.setMember(member);
   }
 
-  createMember(member: Member): void {
-    this.membersStore.createMember(member);
-  }
-
-  updateMember(member: Member): void {
-    this.membersStore.updateMember(member);
+  saveMember(member: Member): void {
+    this.membersStore.saveMember(member);
   }
 
   deleteMember(member: Member): void {

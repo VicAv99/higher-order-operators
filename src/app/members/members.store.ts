@@ -69,6 +69,18 @@ export class MembersStore extends ComponentStore<MemberState> {
     }
   );
 
+  readonly saveMember = this.effect(
+    (member$: Observable<Member>): Observable<Member> => {
+      return member$.pipe(
+        switchMap((member) => {
+          return member.id
+            ? this.membersService.update(member)
+            : this.membersService.create(member);
+        })
+      );
+    }
+  );
+
   readonly createMember = this.effect(
     (member$: Observable<Member>): Observable<Member> => {
       return member$.pipe(

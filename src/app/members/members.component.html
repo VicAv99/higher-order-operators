@@ -9,8 +9,7 @@
   <div class="order-1 w-full md:order-2">
     <higher-order-operators-members-details
       [member]="selectedMember$ | async"
-      (created)="createMember($event)"
-      (updated)="updateMember($event)"
+      (submitted)="saveMember($event)"
       (reset)="reset()"
     />
   </div>

@@ -34,8 +34,9 @@ type NullablePartial<T> = { [P in keyof T]?: T[P] | null };
   ],
 })
 export class MembersDetailsComponent {
-  @Input() set member(value: Member | undefined) {
+  @Input() set member(value: Member | undefined | null) {
     if (!value) return;
+    this.selectedMember = value;
     this.form.patchValue(value);
   }
 
@@ -47,12 +48,9 @@ export class MembersDetailsComponent {
     return this.form.get('id')?.value;
   }
 
-  get memberFirstName(): string | null | undefined {
-    return this.form.get('firstName')?.value;
-  }
-
   private formBuilder = inject(FormBuilder);
 
+  protected selectedMember = {} as Member;
   protected messages = validationMessages;
   protected form = this.formBuilder.group({
     id: 0,

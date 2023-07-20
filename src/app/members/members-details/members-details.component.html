@@ -1,7 +1,9 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>
-      {{ memberId ? 'Updating ' + memberFirstName : 'Create A Member' }}
+      {{
+        memberId ? 'Updating ' + selectedMember.firstName : 'Create A Member'
+      }}
     </mat-card-title>
   </mat-card-header>
   <form [formGroup]="form" (submit)="formSubmitted(form.value)">

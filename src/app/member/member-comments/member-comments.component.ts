@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'higher-order-operators-member-comments',
   standalone: true,
-  imports: [CommonModule],
+  selector: 'higher-order-operators-member-comments',
   templateUrl: './member-comments.component.html',
-  styles: [],
+  imports: [MatFormFieldModule, MatInputModule],
 })
 export class MemberCommentsComponent {}

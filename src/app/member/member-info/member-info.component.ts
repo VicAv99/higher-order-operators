@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'higher-order-operators-member-info',
   standalone: true,
-  imports: [CommonModule],
+  selector: 'higher-order-operators-member-info',
   templateUrl: './member-info.component.html',
-  styles: [],
+  imports: [MatCardModule, MatFormFieldModule, MatInputModule],
 })
 export class MemberInfoComponent {}

@@ -10,9 +10,9 @@ import {
   tap,
 } from 'rxjs';
 
+import { MembersService } from '../shared/members.service';
 import { DialogService } from '../ui/dialog/dialog.service';
 import { CallState, LoadingState, Member } from './member.model';
-import { MembersService } from './members.service';
 
 export interface MemberState {
   member?: Member | null;

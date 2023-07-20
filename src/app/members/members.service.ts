@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Member } from './member.model';
+import { environment } from '@env/environment';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = environment.baseUrl;
 const path = 'members';
 
 @Injectable({

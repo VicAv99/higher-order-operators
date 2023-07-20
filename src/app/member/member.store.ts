@@ -74,7 +74,6 @@ export class MembersStore extends ComponentStore<MemberState> {
     (comment$: Observable<Omit<Comment, 'id'>>) =>
       comment$.pipe(
         tap(() => this.setCallState(LoadingState.LOADING)),
-        tap((comment) => console.log(comment)),
         switchMap((comment) =>
           this.membersService.createComment(comment).pipe(
             tap((newComment) =>

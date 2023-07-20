@@ -10,5 +10,9 @@
   </a>
   <higher-order-operators-member-info [member]="vm.member" />
   <mat-divider />
-  <higher-order-operators-member-comments [comments]="vm.comments" />
+  <higher-order-operators-member-comments
+    [id]="vm.member?.id?.toString()"
+    [comments]="vm.comments"
+    (commented)="comment($event)"
+  />
 </div>

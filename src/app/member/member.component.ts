@@ -5,6 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 
+import { Comment } from '../members/member.model';
 import { MemberCommentsComponent } from './member-comments/member-comments.component';
 import { MemberInfoComponent } from './member-info/member-info.component';
 import { MembersStore } from './member.store';
@@ -30,7 +31,11 @@ export class MemberComponent {
 
   readonly viewModel$ = this.membersStore.viewModel$;
 
-  @Input() set id(value: number | string | null) {
+  @Input() set id(value: string | null) {
     this.membersStore.fetchMember(value);
+  }
+
+  comment(comment: Omit<Comment, 'id'>) {
+    this.membersStore.createComment(comment);
   }
 }

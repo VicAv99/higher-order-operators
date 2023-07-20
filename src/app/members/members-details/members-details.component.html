@@ -1,9 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>
-      {{
-        memberId ? 'Updating ' + selectedMember.firstName : 'Create A Member'
-      }}
+      {{ title }}
     </mat-card-title>
   </mat-card-header>
   <form [formGroup]="form" (submit)="formSubmitted(form.value)">
@@ -17,7 +15,7 @@
           formControlName="firstName"
         />
         <mat-error
-          *ngFor="let error of form.get('firstName')?.errors ?? {} | errorKeys"
+          *ngFor="let error of form.firstName?.errors ?? {} | errorKeys"
         >
           {{ messages[error] }}
         </mat-error>
@@ -31,7 +29,7 @@
           formControlName="lastName"
         />
         <mat-error
-          *ngFor="let error of form.get('lastName')?.errors ?? {} | errorKeys"
+          *ngFor="let error of form.lastName?.errors ?? {} | errorKeys"
         >
           {{ messages[error] }}
         </mat-error>
@@ -44,9 +42,7 @@
           placeholder="Type your last email here"
           formControlName="email"
         />
-        <mat-error
-          *ngFor="let error of form.get('email')?.errors ?? {} | errorKeys"
-        >
+        <mat-error *ngFor="let error of form.email?.errors ?? {} | errorKeys">
           {{ messages[error] }}
         </mat-error>
       </mat-form-field>
@@ -71,7 +67,7 @@
         Cancel
       </button>
       <button mat-flat-button type="submit" color="primary">
-        {{ memberId ? 'Update' : 'Submit' }}
+        {{ selectedMember.id ? 'Update' : 'Submit' }}
       </button>
     </mat-card-actions>
   </form>

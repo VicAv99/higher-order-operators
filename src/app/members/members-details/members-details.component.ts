@@ -1,6 +1,6 @@
 import { JsonPipe, NgFor } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -12,9 +12,8 @@ import {
   validationMessages,
 } from 'src/app/shared/error-keys.pipe';
 
-import { Member } from '../member.model';
-
-type NullablePartial<T> = { [P in keyof T]?: T[P] | null };
+import { Member, NullablePartial } from '../member.model';
+import { MembersDetailsForm } from './members-details.form';
 
 @Component({
   standalone: true,
@@ -35,38 +34,26 @@ type NullablePartial<T> = { [P in keyof T]?: T[P] | null };
 })
 export class MembersDetailsComponent {
   @Input() set member(value: Member | undefined | null) {
-    if (!value) return;
-    this.selectedMember = value;
-    this.form.patchValue(value);
+    this.selectedMember = value ?? ({} as Member);
+    this.form.patchValue(value ?? ({} as Member));
   }
 
-  @Output() created = new EventEmitter<Member>();
-  @Output() updated = new EventEmitter<Member>();
+  @Output() submitted = new EventEmitter<Member>();
   @Output() cancelled = new EventEmitter<void>();
 
-  get memberId(): number | null | undefined {
-    return this.form.get('id')?.value;
+  get title(): string {
+    return this.selectedMember?.id
+      ? `Edit ${this.selectedMember.firstName} ${this.selectedMember.lastName}`
+      : 'Add Member';
   }
-
-  private formBuilder = inject(FormBuilder);
 
   protected selectedMember = {} as Member;
   protected messages = validationMessages;
-  protected form = this.formBuilder.group({
-    id: 0,
-    firstName: ['', [Validators.required, Validators.minLength(3)]],
-    lastName: ['', [Validators.required, Validators.minLength(3)]],
-    dob: '',
-    email: ['', [Validators.required, Validators.email]],
-  });
+  protected form = new MembersDetailsForm(this.selectedMember);
 
   formSubmitted(member: NullablePartial<Member>) {
     if (this.form.invalid) return;
-    if (member.id) {
-      this.updated.emit(member as Member);
-    } else {
-      this.created.emit(member as Member);
-    }
+    this.submitted.emit(member as Member);
     this.formReset();
   }
 

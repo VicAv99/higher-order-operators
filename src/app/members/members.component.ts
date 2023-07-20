@@ -26,6 +26,10 @@ export class MembersComponent {
     this.membersStore.setMember(member);
   }
 
+  searchMembers(searchText: string): void {
+    this.membersStore.searchMembers(searchText);
+  }
+
   saveMember(member: Member): void {
     this.membersStore.saveMember(member);
   }

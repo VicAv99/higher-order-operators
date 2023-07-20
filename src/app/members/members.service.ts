@@ -23,7 +23,7 @@ export class MembersService {
 
   search(term: string): Observable<Member[]> {
     return this.http.get<Member[]>(this.getUrl(), {
-      params: { q: term },
+      params: { firstName_like: term },
     });
   }
 

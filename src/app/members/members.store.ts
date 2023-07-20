@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComponentStore } from '@ngrx/component-store';
 import {
   catchError,
@@ -12,7 +13,7 @@ import {
 
 import { MembersService } from '../shared/members.service';
 import { DialogService } from '../ui/dialog/dialog.service';
-import { CallState, LoadingState, Member } from './member.model';
+import { CallState, getError, LoadingState, Member } from './member.model';
 
 export interface MemberState {
   member?: Member | null;
@@ -28,6 +29,7 @@ const defaultState: MemberState = {
 export class MembersStore extends ComponentStore<MemberState> {
   private readonly dialogService = inject(DialogService);
   private readonly membersService = inject(MembersService);
+  private readonly snackBar = inject(MatSnackBar);
 
   constructor() {
     super(defaultState);
@@ -75,6 +77,10 @@ export class MembersStore extends ComponentStore<MemberState> {
             }),
             catchError((error) => {
               this.setCallState({ errorMsg: error.message });
+              this.snackBar.open(
+                getError(this.get().callState) ?? 'An error occurred',
+                'Dismiss'
+              );
               return EMPTY;
             })
           );
@@ -95,6 +101,10 @@ export class MembersStore extends ComponentStore<MemberState> {
             }),
             catchError((error) => {
               this.setCallState({ errorMsg: error.message });
+              this.snackBar.open(
+                getError(this.get().callState) ?? 'An error occurred',
+                'Dismiss'
+              );
               return EMPTY;
             })
           );
@@ -120,6 +130,14 @@ export class MembersStore extends ComponentStore<MemberState> {
             tap((newMember) => {
               this.setMembers([...this.get().members!, newMember]);
               this.setCallState(LoadingState.LOADED);
+            }),
+            catchError((error) => {
+              this.setCallState({ errorMsg: error.message });
+              this.snackBar.open(
+                getError(this.get().callState) ?? 'An error occurred',
+                'Dismiss'
+              );
+              return EMPTY;
             })
           );
         })
@@ -139,6 +157,14 @@ export class MembersStore extends ComponentStore<MemberState> {
               members[index] = member;
               this.setMembers([...members]);
               this.setCallState(LoadingState.LOADED);
+            }),
+            catchError((error) => {
+              this.setCallState({ errorMsg: error.message });
+              this.snackBar.open(
+                getError(this.get().callState) ?? 'An error occurred',
+                'Dismiss'
+              );
+              return EMPTY;
             })
           );
         })
@@ -162,6 +188,14 @@ export class MembersStore extends ComponentStore<MemberState> {
                   members.splice(index, 1);
                   this.setMembers([...members]);
                   this.setCallState(LoadingState.LOADED);
+                }),
+                catchError((error) => {
+                  this.setCallState({ errorMsg: error.message });
+                  this.snackBar.open(
+                    getError(this.get().callState) ?? 'An error occurred',
+                    'Dismiss'
+                  );
+                  return EMPTY;
                 })
               );
             })

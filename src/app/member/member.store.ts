@@ -1,10 +1,12 @@
 import { inject, Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComponentStore } from '@ngrx/component-store';
 import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 
 import {
   CallState,
   Comment,
+  getError,
   LoadingState,
   Member,
 } from '../members/member.model';
@@ -23,6 +25,7 @@ const defaultState: MemberState = {
 @Injectable()
 export class MembersStore extends ComponentStore<MemberState> {
   private readonly membersService = inject(MembersService);
+  private readonly snackBar = inject(MatSnackBar);
 
   constructor() {
     super(defaultState);
@@ -63,6 +66,10 @@ export class MembersStore extends ComponentStore<MemberState> {
           tap(() => this.setCallState(LoadingState.LOADED)),
           catchError((error) => {
             this.setCallState({ errorMsg: error.message });
+            this.snackBar.open(
+              getError(this.get().callState) ?? 'An error occurred',
+              'Dismiss'
+            );
             return EMPTY;
           })
         )
@@ -82,6 +89,10 @@ export class MembersStore extends ComponentStore<MemberState> {
             tap(() => this.setCallState(LoadingState.LOADED)),
             catchError((error) => {
               this.setCallState({ errorMsg: error.message });
+              this.snackBar.open(
+                getError(this.get().callState) ?? 'An error occurred',
+                'Dismiss'
+              );
               return EMPTY;
             })
           )

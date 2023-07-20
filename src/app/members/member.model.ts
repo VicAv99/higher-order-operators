@@ -26,7 +26,7 @@ export interface ErrorState {
 export type CallState = LoadingState | ErrorState;
 
 // Utility function to extract the error from the state
-export function getError(callState: CallState): LoadingState | string | null {
+export function getError(callState: CallState): string | null {
   if ((callState as ErrorState).errorMsg !== undefined) {
     return (callState as ErrorState).errorMsg;
   }

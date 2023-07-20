@@ -18,18 +18,25 @@ export class MembersService {
     return this.http.get<Member[]>(this.getUrl());
   }
 
-  load(id: number): Observable<Member> {
+  load(id: string): Observable<Member> {
     return this.http.get<Member>(this.getUrlForId(id));
   }
 
   loadMemberWithComments(
-    id: number
+    id: string
   ): Observable<Member & { comments: Comment[] }> {
     return this.http.get<Member & { comments: Comment[] }>(
       `${this.getUrlForId(id)}`,
       {
         params: { _embed: 'comments' },
       }
+    );
+  }
+
+  createComment(comment: Omit<Comment, 'id'>): Observable<Comment> {
+    return this.http.post<Comment>(
+      `${this.getUrlForId(comment.memberId)}/comments`,
+      comment
     );
   }
 
@@ -47,7 +54,7 @@ export class MembersService {
     return this.http.patch<Member>(this.getUrlForId(member.id), member);
   }
 
-  delete(memberId: number): Observable<void> {
+  delete(memberId: string): Observable<void> {
     return this.http.delete<void>(this.getUrlForId(memberId));
   }
 
@@ -55,7 +62,7 @@ export class MembersService {
     return `${BASE_URL}/${path}`;
   }
 
-  private getUrlForId(id: number): string {
+  private getUrlForId(id: string): string {
     return `${this.getUrl()}/${id}`;
   }
 }

@@ -53,14 +53,33 @@ export class MembersStore extends ComponentStore<MemberState> {
     callState,
   }));
 
-  readonly fetchMember = this.effect(
-    (id$: Observable<number | string | null>) =>
-      id$.pipe(
+  readonly fetchMember = this.effect((id$: Observable<string | null>) =>
+    id$.pipe(
+      tap(() => this.setCallState(LoadingState.LOADING)),
+      switchMap((id) =>
+        this.membersService.loadMemberWithComments(String(id)).pipe(
+          tap(({ comments, ...member }) => this.setMember(member)),
+          tap(({ comments }) => this.setComments(comments)),
+          tap(() => this.setCallState(LoadingState.LOADED)),
+          catchError((error) => {
+            this.setCallState({ errorMsg: error.message });
+            return EMPTY;
+          })
+        )
+      )
+    )
+  );
+
+  readonly createComment = this.effect(
+    (comment$: Observable<Omit<Comment, 'id'>>) =>
+      comment$.pipe(
         tap(() => this.setCallState(LoadingState.LOADING)),
-        switchMap((id) =>
-          this.membersService.loadMemberWithComments(Number(id)).pipe(
-            tap(({ comments, ...member }) => this.setMember(member)),
-            tap(({ comments }) => this.setComments(comments)),
+        tap((comment) => console.log(comment)),
+        switchMap((comment) =>
+          this.membersService.createComment(comment).pipe(
+            tap((newComment) =>
+              this.setComments([...this.get().comments!, newComment])
+            ),
             tap(() => this.setCallState(LoadingState.LOADED)),
             catchError((error) => {
               this.setCallState({ errorMsg: error.message });

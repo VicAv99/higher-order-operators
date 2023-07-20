@@ -1,13 +1,13 @@
 export type NullablePartial<T> = { [P in keyof T]?: T[P] | null };
 
 export interface Comment {
-  id: number;
-  memberId: number;
+  id: string;
+  memberId: string;
   text: string;
 }
 
 export interface Member {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   dob: string;

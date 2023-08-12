@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComponentStore } from '@ngrx/component-store';
 import {
@@ -13,12 +14,19 @@ import {
 
 import { MembersService } from '../shared/members.service';
 import { DialogService } from '../ui/dialog/dialog.service';
-import { CallState, getError, LoadingState, Member } from './member.model';
+import {
+  CallState,
+  getError,
+  LoadingState,
+  Member,
+  MembersResponse,
+} from './member.model';
 
 export interface MemberState {
   member?: Member | null;
   members?: Member[];
   callState: CallState;
+  total?: number;
 }
 
 const defaultState: MemberState = {
@@ -38,11 +46,13 @@ export class MembersStore extends ComponentStore<MemberState> {
   readonly member$ = this.select((state) => state.member);
   readonly members$ = this.select((state) => state.members);
   readonly callState$ = this.select((state) => state.callState);
+  readonly total$ = this.select((state) => state.total);
 
   readonly viewModel$ = this.select({
     member: this.member$,
     members: this.members$,
     callState: this.callState$,
+    total: this.total$,
   });
 
   readonly clearMember = this.updater((state) => ({
@@ -65,14 +75,23 @@ export class MembersStore extends ComponentStore<MemberState> {
     callState,
   }));
 
+  readonly setTotal = this.updater((state, total: number) => ({
+    ...state,
+    total,
+  }));
+
   readonly fetchMembers = this.effect(
-    (trigger$: Observable<void>): Observable<Member[]> => {
+    (
+      trigger$: Observable<PageEvent | undefined>
+    ): Observable<MembersResponse> => {
       return trigger$.pipe(
         tap(() => this.setCallState(LoadingState.LOADING)),
-        switchMap(() => {
-          return this.membersService.all().pipe(
-            tap((members) => {
-              this.setMembers(members);
+        tap((pageEvent) => console.log(pageEvent)),
+        switchMap((pageEvent) => {
+          return this.membersService.all(pageEvent).pipe(
+            tap((membersResponse) => {
+              this.setMembers(membersResponse.members);
+              this.setTotal(membersResponse.total);
               this.setCallState(LoadingState.LOADED);
             }),
             catchError((error) => {

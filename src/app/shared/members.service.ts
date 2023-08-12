@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { environment } from '@env/environment';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
-import { Comment, Member } from '../members/member.model';
+import { Comment, Member, MembersResponse } from '../members/member.model';
 
 const BASE_URL = environment.baseUrl;
 const path = 'members';
@@ -14,8 +15,22 @@ const path = 'members';
 export class MembersService {
   constructor(private http: HttpClient) {}
 
-  all(): Observable<Member[]> {
-    return this.http.get<Member[]>(this.getUrl());
+  all(event?: PageEvent): Observable<MembersResponse> {
+    return this.http
+      .get<Member[]>(this.getUrl(), {
+        observe: 'response',
+        params: {
+          _page: (event?.pageIndex ?? 0) + 1,
+          _limit: event?.pageSize ?? 10,
+        },
+      })
+      .pipe(
+        // get total members count from X-Total-Count response headers
+        map((response) => ({
+          members: response.body ?? [],
+          total: +response.headers.get('X-Total-Count')!,
+        }))
+      );
   }
 
   loadMemberWithComments(

@@ -6,6 +6,8 @@
     <higher-order-operators-members-list
       [callState]="vm.callState"
       [members]="vm.members"
+      [total]="vm.total"
+      (pageEvent)="fetchMembers($event)"
       (deleted)="deleteMember($event)"
       (searched)="searchMembers($event)"
       (selected)="selectMember($event)"

@@ -1,9 +1,9 @@
 import { NgFor, NgIf } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -14,13 +14,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { MembersListDataSource } from 'src/app/members/members-list/members-list.datasource';
 
 import { CallState, LoadingState, Member } from '../member.model';
 
@@ -45,17 +48,21 @@ import { CallState, LoadingState, Member } from '../member.model';
     RouterModule,
   ],
 })
-export class MembersListComponent implements OnChanges {
-  protected dataSource?: MembersListDataSource;
+export class MembersListComponent implements AfterViewInit {
+  protected dataSource!: MatTableDataSource<Member>;
 
   protected readonly displayedColumns = ['name', 'actions'];
   protected readonly loadingState = LoadingState;
   protected readonly searchControl = new FormControl();
 
+  @Input() total?: number;
   @Input() callState?: CallState = LoadingState.INIT;
-  @Input() members?: Member[] | null = [];
+  @Input() set members(value: Member[] | undefined) {
+    this.dataSource = new MatTableDataSource(value || []);
+  }
 
   @Output() deleted = new EventEmitter<Member>();
+  @Output() pageEvent = new EventEmitter<PageEvent>();
   @Output() selected = new EventEmitter<Member>();
   @Output() searched = this.searchControl.valueChanges.pipe(
     debounceTime(500),
@@ -65,13 +72,8 @@ export class MembersListComponent implements OnChanges {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  ngOnChanges(): void {
-    if (!this.sort || !this.paginator) return;
-    this.dataSource = new MembersListDataSource(
-      this.members || [],
-      this.sort,
-      this.paginator
-    );
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
   selectedClicked(member: Member) {
@@ -80,5 +82,9 @@ export class MembersListComponent implements OnChanges {
 
   deleteClicked(member: Member) {
     this.deleted.emit(member);
+  }
+
+  pageChanged(event: PageEvent) {
+    this.pageEvent.emit(event);
   }
 }

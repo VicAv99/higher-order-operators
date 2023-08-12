@@ -14,6 +14,11 @@ export interface Member {
   email: string;
 }
 
+export interface MembersResponse {
+  members: Member[];
+  total: number;
+}
+
 export enum LoadingState {
   INIT = 'INIT',
   LOADING = 'LOADING',

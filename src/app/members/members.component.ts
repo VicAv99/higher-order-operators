@@ -1,5 +1,6 @@
 import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 
 import { Member } from './member.model';
 import { MembersDetailsComponent } from './members-details/members-details.component';
@@ -19,7 +20,11 @@ export class MembersComponent {
   viewModel$ = this.membersStore.viewModel$;
 
   constructor() {
-    this.membersStore.fetchMembers();
+    this.fetchMembers();
+  }
+
+  fetchMembers(event?: PageEvent): void {
+    this.membersStore.fetchMembers(event);
   }
 
   selectMember(member: Member): void {
